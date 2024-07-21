@@ -11,7 +11,7 @@ class BaseBottomSheet extends StatelessWidget {
 
   final Widget child;
   final EdgeInsets? padding;
-//아래
+//바텀시트 부분
   @override
   Widget build(BuildContext context) {
     return Container(
