@@ -22,6 +22,7 @@ class ShoppingView extends StatelessWidget {
             onPressed: () {
               showModalBottomSheet(
                 context: context,
+
                 builder: (context) {
                   return const SettingBottomSheet();
                 },
