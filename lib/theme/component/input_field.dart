@@ -27,7 +27,7 @@ class InputField extends StatefulWidget {
 class _InputFieldState extends State<InputField> {
   late final TextEditingController controller =
       widget.controller ?? TextEditingController();
-//검색어 부분
+//검색어 부분 커
   @override
   Widget build(BuildContext context) {
     return TextField(
