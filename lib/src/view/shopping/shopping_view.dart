@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:house_of_tomorrow/src/service/theme_service.dart';
@@ -5,61 +7,78 @@ import 'package:house_of_tomorrow/theme/component/bottom_sheet/base_bottom_sheet
 import 'package:house_of_tomorrow/theme/component/bottom_sheet/setting_bottom_sheet.dart';
 import 'package:house_of_tomorrow/theme/component/button/button.dart';
 import 'package:house_of_tomorrow/theme/component/input_field.dart';
+import 'package:house_of_tomorrow/util/helper/network_helper.dart';
 import 'package:house_of_tomorrow/util/lang/generated/l10n.dart';
-import 'package:provider/provider.dart';
 
-class ShoppingView extends StatelessWidget {
+class ShoppingView extends StatefulWidget {
   const ShoppingView({super.key});
+
+  @override
+  State<ShoppingView> createState() => _ShoppingViewState();
+}
+
+class _ShoppingViewState extends State<ShoppingView> {
+  List productList = [];
+
+  Future<void> searchProductList() async {
+    try {
+      final res = await NetworkHelper.dio.get(
+        'https://gist.githubusercontent.com/nero-angela/d16a5078c7959bf5abf6a9e0f8c2851a/raw/04fb4d21ddd1ba06f0349a890f5e5347d94d677e/ikeaSofaDataIBB.json',
+      );
+      print(res.data);
+    } catch (e, s) {
+      log('Failed to searchProductList', error: e, stackTrace: s);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(S.current.shopping),
-          actions: [
-            ///설정버튼
-            Button(
-              icon: 'option',
-              type: ButtonType.flat,
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return const SettingBottomSheet();
-                  },
-                );
-              },
+      appBar: AppBar(
+        title: Text(S.current.shopping),
+        actions: [
+          ///설정버튼
+          Button(
+            icon: 'option',
+            type: ButtonType.flat,
+            onPressed: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return const SettingBottomSheet();
+                },
+              );
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 8,
             ),
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
-              ),
-              child: Row(
-                children: [
-                  ///검색 입력란
-                  Expanded(
-                    child: InputField(
-                      hint: S.current.searchProduct,
-                    ),
+            child: Row(
+              children: [
+                ///검색 입력란
+                Expanded(
+                  child: InputField(
+                    hint: S.current.searchProduct,
                   ),
-                  const SizedBox(
-                    width: 16
-                  ),
+                ),
+                const SizedBox(width: 16),
 
-                  ///검색 버튼
-                  Button(
-                    onPressed: () {},
-                    icon: 'search',
-                  )
-                ],
-              ),
+                ///검색 버튼
+                Button(
+                  onPressed: searchProductList,
+                  icon: 'search',
+                )
+              ],
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }
